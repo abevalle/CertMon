@@ -1,0 +1,25 @@
+{
+  "name": "certmon",
+  "version": "1.0.0",
+  "description": "https cert monitor",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abevalle/CertMon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abevalle/CertMon/issues"
+  },
+  "homepage": "https://github.com/abevalle/CertMon#readme",
+  "dependencies": {
+    "cacheable-lookup": "^6.0.0",
+    "get-ssl-certificate": "^2.3.3",
+    "inquirer": "^8.0.0",
+    "whois": "^2.13.3"
+  }
+}
