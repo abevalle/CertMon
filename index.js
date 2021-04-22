@@ -1,49 +1,28 @@
-const inquirer = require('inquirer');
-const http = require('http');
-const CacheableLookup = require('cacheable-lookup');
-const sslCertificate = require('get-ssl-certificate');
-const whois = require('whois')
-const { Resolver } = require('dns');
-const { resolve } = require('path');
-const resolver = new Resolver();
-const cacheable = new CacheableLookup();
-resolver.setServers(['1.1.1.1'])
+const utils = require('./utils.js')
+const http = require('http')
 
-function getDNSCache(domain) {
-    http.get(`http://${domain}`, {lookup: cacheable.lookup}, response => {
-    console.log(response);
-    });
-}
 
-function getCertInfo(domain) {
-    sslCertificate.get(domain).then(function (certificate) {
-        console.log(certificate)
-    });
-}
-
-function getWhois(domain) {
-    whois.lookup(domain, function(err, data) {
-        if(err) {
-            console.log(err); 
-        } else {
-            console.log(data)
-        }
-    });
-}
-
-function getIP(...domains) {
-    for(let d in domains) {
-        let resolvedList = {};
-        resolver.resolve4(domains[d], (err, addresses) => {
-            let resolved = {
-                'domain': domains[d],
-                'addresses': addresses
+function getHTTPStatus(hostname, port, path, agent) {
+    agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36."
+    return new Promise ((resolve) => {
+        http.get({"hostname": hostname, "port": port, "path": path, agent: agent}, (res, err) => {
+            results = {
+                code: res.statusCode,
+                message: res.statusMessage
+            
             }
-            console.log(resolved);
-            resolvedList.domains[d] = resolved;
+            resolve(results)
+        })
+    })
+}
+
+
+function test(...domain) {
+    for (let d in domain) {
+        getHTTPStatus(domain[d], 80, '/').then(res => {
+            console.log(res)
         })
     }
-    return resolvedList;
 }
 
-console.log(getIP('abevalle.com', 'valle.us', 'valle.gg'))
+test('abevalle.com', 'valle.us', 'google.com')
